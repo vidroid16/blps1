@@ -1,5 +1,8 @@
 package com.example.demo.Payment;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class CardChecker {
     public static int checkCard(Card card){
         String num = card.getNumber();

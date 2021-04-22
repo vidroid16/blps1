@@ -8,6 +8,8 @@ import com.example.demo.DataBase.ProjectsDB.ProjectRepository;
 import com.example.demo.DataBase.UsersDB.User;
 import com.example.demo.DataBase.UsersDB.UsersRepository;
 import com.example.demo.JsonResponse;
+import com.example.demo.Services.Implementations.DonationServiceImpl;
+import com.example.demo.Services.Implementations.UserServiceImpl;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,42 +21,46 @@ import javax.transaction.Transactional;
 
 @RestController
 public class DonateController {
+    private final UserServiceImpl userService;
+    private final DonationServiceImpl donationService;
     @Autowired
     UsersRepository usersRepository;
     @Autowired
     ProjectRepository projectRepository;
     @Autowired
     DonationsRepository donationsRepository;
+
+    @Autowired
+    public DonateController(UserServiceImpl userService, DonationServiceImpl donationService) {
+        this.userService = userService;
+        this.donationService = donationService;
+    }
+
+    @Autowired
+
     @PostMapping("/test")
-    public MyResponse test(String data){
-        System.out.println(data);
+    public MyResponse test(){
         return new MyResponse(200, "OK!");
     }
 
     @PostMapping("/check")
     public MyResponse isAuth(String token){
-        try{
-            System.out.println(token);
-            String res = usersRepository.findByToken(token).getToken();
+        boolean isAuth = userService.checkUserIsAuth(token);
+        if(isAuth){
             return new MyResponse(200, "ok");
-        }catch (NullPointerException e){
+        }else {
             return new MyResponse(404, "Пожалуйста авторизируйтесь в нашей системе");
-
         }
     }
 
     @PostMapping("/donate")
     @Transactional
     public MyResponse donate(@RequestParam(value = "token") String token, @RequestParam(value = "project_id") Long project_id, @RequestParam(value = "sum") int sum){
-        try {
-            User u = usersRepository.findByToken(token);
-            System.out.println(u.getLogin());
-            Project p = projectRepository.findById(project_id).get();
-            donationsRepository.save(new Donation(u,p,sum));
-            projectRepository.donate(sum,project_id);
-        }catch (NullPointerException e){
+        boolean isDonated = donationService.donate(token, project_id, sum);
+        if(isDonated){
             return new MyResponse(404,"Нет такого пользователя или проекта");
+        }else {
+            return new MyResponse(200,""+sum);
         }
-        return new MyResponse(200,""+sum);
     }
 }
