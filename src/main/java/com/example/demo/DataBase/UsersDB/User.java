@@ -43,12 +43,19 @@ public class User {
         return this.token;
     }
 
-    public String getToken(){
-        return token;
-    }
-
     public String getLogin(){
         return this.login;
     }
 
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

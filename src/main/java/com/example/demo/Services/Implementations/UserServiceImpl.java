@@ -16,12 +16,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean checkUserIsAuth(String token) {
-        try{
-            String res = usersRepository.findByToken(token).getToken();
-            return true;
-        }catch (NullPointerException e){
+        if (usersRepository.findByToken(token) == null)
             return false;
-
-        }
+        return true;
     }
 }

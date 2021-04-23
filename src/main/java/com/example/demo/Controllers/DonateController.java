@@ -78,7 +78,7 @@ public class DonateController {
     public ResponseEntity donate(@RequestParam(value = "token") String token, @RequestParam(value = "project_id") Long project_id, @RequestParam(value = "card") String cardNumber, @RequestParam(value = "sum") int sum) throws IOException {
         boolean isDonated = donationService.donate(token, project_id, sum);
         if(isDonated){
-            HttpPost post = new HttpPost("http://localhost:8081/bank/donate");
+            HttpPost post = new HttpPost("http://localhost:18110/bank/donate");
             JSONObject requestBody = new JSONObject();
             requestBody.put("number", cardNumber);
             requestBody.put("money", String.valueOf(sum));
