@@ -3,34 +3,46 @@ package com.example.demo.Payment;
 import java.util.Date;
 
 public class Card {
-    private String number;
-    private String cardholder;
+    private String firstName;
+    private String lastName;
     private Date date;
-    private int cvc;
+    private String number;
+    private int money;
 
-    public Card() { }
-
-    public Card(String number, String cardholder, Date date, int cvc) {
-        this.number = number;
-        this.cardholder = cardholder;
+    public Card(String firstName, String lastName, Date date, String number) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.date = date;
-        this.cvc = cvc;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
         this.number = number;
+        this.money = 0;
     }
 
-    public String getCardholder() {
-        return cardholder;
+    public int getMoney() {
+        return money;
     }
 
-    public void setCardholder(String cardholder) {
-        this.cardholder = cardholder;
+    public void addMoney(int amount) {
+        this.money += amount;
+    }
+
+    public void withdrawMoney(int amount) {
+        this.money -= amount;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public Date getDate() {
@@ -41,11 +53,11 @@ public class Card {
         this.date = date;
     }
 
-    public int getCvc() {
-        return cvc;
+    public String getNumber() {
+        return number;
     }
 
-    public void setCvc(int cvc) {
-        this.cvc = cvc;
+    public void setNumber(String number) {
+        this.number = number;
     }
 }
