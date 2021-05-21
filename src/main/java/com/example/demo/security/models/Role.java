@@ -2,12 +2,14 @@ package com.example.demo.security.models;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public enum Role {
-    USER(Set.of(Permission.PROJECT_CREATE, Permission.PROJECT_FIND, Permission.KICK_STARTER_DONATE)),
-    ADMIN(Set.of(Permission.PROJECT_CREATE, Permission.PROJECT_FIND, Permission.KICK_STARTER_DONATE, Permission.USERS_CREATE, Permission.USERS_LIST));
+    USER(new HashSet<>(Arrays.asList(Permission.PROJECT_CREATE, Permission.PROJECT_FIND, Permission.KICK_STARTER_DONATE))),
+    ADMIN(new HashSet<>(Arrays.asList(Permission.PROJECT_CREATE, Permission.PROJECT_FIND, Permission.KICK_STARTER_DONATE, Permission.USERS_CREATE, Permission.USERS_LIST)));
 
     private final Set<Permission> permissions;
 

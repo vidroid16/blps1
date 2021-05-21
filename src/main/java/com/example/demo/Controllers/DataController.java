@@ -30,24 +30,37 @@ public class DataController {
 
     @Operation(summary = "Ищет проекты по имени")
     @GetMapping ("/search_project")
+
     public ArrayList<Project> test(String name){
-        System.out.println(name);
-        ArrayList<Project> pr = dataService.doSearch(name);
-        return pr;
+        try{
+            System.out.println(name);
+            ArrayList<Project> pr = dataService.doSearch(name);
+            return pr;
+        }catch(Exception e){
+            return null;
+        }
     }
 
     @Operation(summary = "Create project")
     @PostMapping ("/add_project")
     public ResponseEntity addProject(@RequestBody Project project) {
-        dataService.addProject(project);
-        return ResponseEntity.ok().build();
+        try {
+            dataService.addProject(project);
+            return ResponseEntity.ok().build();
+        }catch (Exception e){
+            return null;
+        }
     }
 
     @Operation(summary = "List users")
     @GetMapping ("/users")
     public ResponseEntity listUsers() {
-        JSONArray array = new JSONArray(dataService.listUsers());
-        return ResponseEntity.ok().body(array.toString());
+        try {
+            JSONArray array = new JSONArray(dataService.listUsers());
+            return ResponseEntity.ok().body(array.toString());
+        }catch (Exception e){
+            return null;
+        }
     }
 
     @Operation(summary = "Create user")

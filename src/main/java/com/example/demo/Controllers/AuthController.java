@@ -2,6 +2,7 @@ package com.example.demo.Controllers;
 
 import com.example.demo.DataBase.UsersDB.User;
 import com.example.demo.DataBase.UsersDB.UsersRepository;
+import com.example.demo.Services.Implementations.UserServiceImpl;
 import com.example.demo.security.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
@@ -25,28 +26,22 @@ import java.util.Map;
 @RequestMapping("auth")
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
-    private UsersRepository userRepository;
-    private JwtTokenProvider jwtTokenProvider;
+    private UserServiceImpl userService;
 
-    public AuthController(AuthenticationManager authenticationManager, UsersRepository userRepository, JwtTokenProvider jwtTokenProvider) {
-        this.authenticationManager = authenticationManager;
-        this.userRepository = userRepository;
-        this.jwtTokenProvider = jwtTokenProvider;
+    public AuthController( UserServiceImpl userService) {
+        this.userService = userService;
     }
 
     @Operation(summary = "Проверка авторизации пользователя")
     @PostMapping("/login")
     public ResponseEntity login(@RequestParam(value = "username") String username, @RequestParam(value = "password") String password){
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-            User user = userRepository.findByLogin(username).orElseThrow(() -> new UsernameNotFoundException("User doesn't exists"));
-            String token = jwtTokenProvider.createToken(username, user.getRole().name());
+        String req = userService.login(username,password);
+        if (!req.equals("bad")){
             Map<Object, Object> response = new HashMap<>();
             response.put("username", username);
-            response.put("token", token);
+            response.put("token", req);
             return ResponseEntity.ok(response);
-        } catch (AuthenticationException e) {
+        }else {
             return new ResponseEntity<>("Invalid email/password combination", HttpStatus.FORBIDDEN);
         }
     }

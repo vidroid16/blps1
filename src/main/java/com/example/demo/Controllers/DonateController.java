@@ -11,11 +11,14 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.transaction.Transaction;
+import javax.transaction.TransactionManager;
 import javax.transaction.Transactional;
 import java.io.*;
 
@@ -38,28 +41,17 @@ public class DonateController {
 
     @Operation(summary = "Задонатить деньги")
     @PostMapping(path ="/donate")
-    @Transactional
-    public ResponseEntity donate(@RequestParam(value = "login") String login, @RequestParam(value = "project_id") Long project_id, @RequestParam(value = "card") String cardNumber, @RequestParam(value = "sum") int sum) throws IOException {
-        boolean isDonated = donationService.donate(login, project_id, sum);
-        if(isDonated){
-            HttpPost post = new HttpPost("http://localhost:18110/bank/donate");
-            JSONObject requestBody = new JSONObject();
-            requestBody.put("number", cardNumber);
-            requestBody.put("money", String.valueOf(sum));
-            post.setHeader("content-type", "application/json");
-            post.setEntity(new StringEntity(requestBody.toString()));
-            try (CloseableHttpClient httpClient = HttpClients.createDefault();
-                 CloseableHttpResponse response = httpClient.execute(post)){
-                if (response.getStatusLine().getStatusCode() != 200) {
-                    TransactionInterceptor.currentTransactionStatus().setRollbackOnly();
-                    return ResponseEntity.status(response.getStatusLine().getStatusCode()).body(EntityUtils.toString(response.getEntity()));
-                }
-                return ResponseEntity.status(response.getStatusLine().getStatusCode()).body(EntityUtils.toString(response.getEntity()));
-            }
-//            return new MyResponse(200,""+sum);
-        }else {
-            return ResponseEntity.badRequest().body("{\"response\":\"Нет такого пользователя или проекта!\"}");
-        }
+    public String donate(@RequestParam(value = "login") String login, @RequestParam(value = "project_id") Long project_id, @RequestParam(value = "card") String cardNumber, @RequestParam(value = "sum") int sum) throws IOException {
+        int donated = donationService.donate(login, project_id, sum, cardNumber);
+        if(donated == 200) return "Операция произведена успешно";
+        if(donated == 400) return "Не достаточно средств или некорректно введены данные карты";
+        return "Что-то пошло не так";
+    }
+
+    @PostMapping(path ="/Tr")
+    public int testTr(){
+        donationService.testTr();
+        return 12;
     }
 
 }
