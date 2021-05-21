@@ -13,9 +13,12 @@ public class LocalDB{
     public DataSource getDataSource() {
         DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
         dataSourceBuilder.driverClassName("org.postgresql.Driver");
-        dataSourceBuilder.url("jdbc:postgresql://pg/studs");
-        dataSourceBuilder.username("s264444");
-        dataSourceBuilder.password("hqz388");
+//        dataSourceBuilder.url("jdbc:postgresql://pg/studs");
+//        dataSourceBuilder.username("s264444");
+//        dataSourceBuilder.password("hqz388");
+        dataSourceBuilder.url("jdbc:postgresql://localhost:5432/postgres");
+        dataSourceBuilder.username("postgres");
+        dataSourceBuilder.password("va181100");
         return dataSourceBuilder.build();
     }
 }

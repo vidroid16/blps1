@@ -27,15 +27,15 @@ public class DonationServiceImpl implements DonationService {
     }
 
     @Override
-    public boolean donate(String token, Long project_id, int sum) {
-        try {
-            User u = usersRepository.findByToken(token);
-            Project p = projectRepository.findById(project_id).get();
-            donationsRepository.save(new Donation(u,p,sum));
-            projectRepository.donate(sum,project_id);
-        }catch (NullPointerException e){
+    public boolean donate(String login, Long project_id, int sum) {
+        User u = usersRepository.findByLogin(login).orElse(null);
+        if (u == null)
             return false;
-        }
+        Project p = projectRepository.findById(project_id).get();
+        if (p == null)
+            return false;
+        donationsRepository.save(new Donation(u,p,sum));
+        projectRepository.donate(sum, project_id);
         return true;
     }
 

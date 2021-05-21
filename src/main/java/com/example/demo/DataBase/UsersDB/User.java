@@ -2,6 +2,8 @@ package com.example.demo.DataBase.UsersDB;
 
 
 import com.example.demo.DataBase.ProjectsDB.Project;
+import com.example.demo.security.models.Role;
+import com.example.demo.security.models.Status;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -11,36 +13,31 @@ import java.util.UUID;
 
 @Entity
 @JsonIgnoreProperties("password")
-@Table(name = "users")
+@Table(name = "blps_users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(name = "login")
     private String login;
+    @Column(name = "password")
     private String password;
-    private String token;
+    @Column(name = "first_name")
+    private String firstName;
+    @Column(name = "last_name")
+    private String lastName;
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "role")
+    private Role role;
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "status")
+    private Status status;
 
-    public User(){}
-//    @ManyToMany
-//    @JoinTable(name = "donations",
-//            joinColumns = { @JoinColumn(name = "user_id") },
-//            inverseJoinColumns = { @JoinColumn(name = "project_id") })
-//    private Set<Project> projectSet = new HashSet<Project>();
-    @Override
-    public String toString() {
-        return "Login:"+login+" Password:"+password;
-    }
-
-    public User(String login, String password){
-        this.login = login;
-        this.password = password;
-    }
-
-    public String token(){
-        this.token = UUID.randomUUID().toString();
-        return this.token;
+    public User() {
+        role = Role.USER;
+        status = Status.ACTIVE;
     }
 
     public String getLogin(){
@@ -57,5 +54,37 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

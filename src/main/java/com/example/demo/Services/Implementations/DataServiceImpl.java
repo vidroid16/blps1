@@ -4,23 +4,22 @@ import com.example.demo.DataBase.ProjectsDB.Project;
 import com.example.demo.DataBase.ProjectsDB.ProjectRepository;
 import com.example.demo.DataBase.UsersDB.User;
 import com.example.demo.DataBase.UsersDB.UsersRepository;
-import com.example.demo.Services.SearchService;
+import com.example.demo.Services.DataService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 @Service
-public class SearchServiceImpl implements SearchService {
+public class DataServiceImpl implements DataService {
     private final ProjectRepository projectRepository;
     private final UsersRepository usersRepository;
 
-    public SearchServiceImpl(ProjectRepository projectRepository, UsersRepository usersRepository) {
+    public DataServiceImpl(ProjectRepository projectRepository, UsersRepository usersRepository) {
         this.projectRepository = projectRepository;
         this.usersRepository = usersRepository;
     }
 
     @Override
     public void addUser(User user) {
-        user.token();
         usersRepository.save(user);
     }
 
