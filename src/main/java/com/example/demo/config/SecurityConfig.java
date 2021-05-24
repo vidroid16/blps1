@@ -32,6 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/auth/login").permitAll()
+                .antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/swagger").permitAll()
                 .antMatchers("/search_project").hasAuthority(Permission.PROJECT_FIND.getPermission())
                 .antMatchers("/add_project").hasAuthority(Permission.PROJECT_CREATE.getPermission())
                 .antMatchers("/add_user").hasAuthority(Permission.USERS_CREATE.getPermission())
