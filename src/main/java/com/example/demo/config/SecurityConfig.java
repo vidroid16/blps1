@@ -38,6 +38,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/add_user").hasAuthority(Permission.USERS_CREATE.getPermission())
                 .antMatchers("/users").hasAuthority(Permission.USERS_LIST.getPermission())
                 .antMatchers("/donate").hasAuthority(Permission.KICK_STARTER_DONATE.getPermission())
+                .antMatchers("/websocketkick").permitAll()
+                .antMatchers("/blablabla").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
