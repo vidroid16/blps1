@@ -23,6 +23,7 @@ import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandler;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,47 +51,14 @@ public class DonateController {
     }
 
     @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
+
     @Operation(summary = "Тестовый ендпоинт")
-    @PostMapping("/test")
+    @GetMapping("/test")
     public ResponseEntity test() throws InterruptedException, ExecutionException, TimeoutException {
-//        WebSocketClient client = new StandardWebSocketClient();
-//
-//        WebSocketStompClient stompClient = new WebSocketStompClient(client);
-//        stompClient.setMessageConverter(new MappingJackson2MessageConverter());
-//
-//        StompSessionHandler sessionHandler = new StompSessionHandler() {
-//            @Override
-//            public void afterConnected(StompSession stompSession, StompHeaders stompHeaders) {
-//
-//            }
-//
-//            @Override
-//            public void handleException(StompSession stompSession, StompCommand stompCommand, StompHeaders stompHeaders, byte[] bytes, Throwable throwable) {
-//
-//            }
-//
-//            @Override
-//            public void handleTransportError(StompSession stompSession, Throwable throwable) {
-//
-//            }
-//
-//            @Override
-//            public Type getPayloadType(StompHeaders stompHeaders) {
-//                return null;
-//            }
-//
-//            @Override
-//            public void handleFrame(StompHeaders stompHeaders, Object o) {
-//                SocketMessage message = (SocketMessage) o;
-//                System.out.println("Message was received with content: " + message.getContent());
-//            }
-//        };
-//        StompSession stompSession = stompClient.connect("ws://localhost:17886/websocketkick", sessionHandler).get(10, TimeUnit.SECONDS);
-//
-//        stompSession.subscribe("/topic/messages", sessionHandler);
-//        SocketMessage message = new SocketMessage();
-//        message.setContent("Hello world!");
-//        stompSession.send("/chat.sendMessage", message);
+        SocketMessage message = new SocketMessage();
+        message.setContent("Hello from template!");
+        simpMessagingTemplate.convertAndSend("/queue/messages",message);
         return ResponseEntity.ok().build();
     }
 
