@@ -32,8 +32,11 @@ public class LocalDB{
     @Bean(name = "bitronixTransactionManager")
     @DependsOn
     public BitronixTransactionManager bitronixTransactionManager() throws Throwable {
+        bitronix.tm.Configuration configuration = TransactionManagerServices.getConfiguration();
+        configuration.setJournal(null);
         BitronixTransactionManager bitronixTransactionManager = TransactionManagerServices.getTransactionManager();
         bitronixTransactionManager.setTransactionTimeout(10000);
+
         CustomJtaPlatform.setUserTransaction(bitronixTransactionManager);
         CustomJtaPlatform.setTransactionManager(bitronixTransactionManager);
         return bitronixTransactionManager;
@@ -53,7 +56,7 @@ public class LocalDB{
         bitronixDataSourceBean.setAllowLocalTransactions(true);
         Properties properties = new Properties();
         properties.put("user",  "postgres");
-        properties.put("password",  "postgres");
+        properties.put("password",  "va181100");
         properties.put("url", "jdbc:postgresql://localhost:5432/postgres");
         bitronixDataSourceBean.setDriverProperties(properties);
         return bitronixDataSourceBean;

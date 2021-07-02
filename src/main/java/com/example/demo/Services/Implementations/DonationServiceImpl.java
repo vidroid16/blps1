@@ -26,6 +26,8 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 @Service
@@ -82,6 +84,39 @@ public class DonationServiceImpl implements DonationService {
             transactionManager.rollback(status);
             return 501;
         }
+        transactionManager.commit(status);
+        return 200;
+    }
+
+    @Override
+    public int donate(Long project_id, int sum) {
+        DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+        def.setName("Donation Transaction"); // Transaction name
+        def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+        TransactionStatus status = transactionManager.getTransaction(def);
+
+        try {
+            Project p = projectRepository.findById(project_id).get();
+            if (p == null)
+                return 500;
+            projectRepository.donate(sum, project_id);
+            HttpPost post = new HttpPost("http://localhost:" + this.bankServerPort + "/bank/donate");
+            JSONObject requestBody = new JSONObject();
+            requestBody.put("number", p.getCard());
+            requestBody.put("money", String.valueOf(sum));
+            post.setHeader("content-type", "application/json");
+            post.setEntity(new StringEntity(requestBody.toString()));
+            CloseableHttpClient httpClient = HttpClients.createDefault();
+            CloseableHttpResponse response = httpClient.execute(post);
+            if(response.getStatusLine().getStatusCode()!=200){
+                transactionManager.rollback(status);
+                return 400;
+            }
+        }catch (Exception e){
+            transactionManager.rollback(status);
+            return 501;
+        }
+        System.out.println("ROLLBACK");
         transactionManager.commit(status);
         return 200;
     }

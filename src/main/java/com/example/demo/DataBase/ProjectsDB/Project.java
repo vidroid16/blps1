@@ -14,19 +14,51 @@ public class Project {
         private String name;
         private int need_sum;
         private int cur_sum;
+        private int checked;
+        private String card;
+        private String mail;
 
-        public Project(){}
+        public Project(){
+
+        }
 
         public Project(String name, int need_sum, int cur_sum) {
                 this.name = name;
                 this.need_sum = need_sum;
                 this.cur_sum = cur_sum;
         }
-
+        public Project(String name, int need_sum, int cur_sum, String card, String mail) {
+                this.name = name;
+                this.need_sum = need_sum;
+                this.cur_sum = cur_sum;
+                this.card = card;
+                this.mail = mail;
+        }
+        public Project(String name, int need_sum, int cur_sum, int checked) {
+                this.name = name;
+                this.need_sum = need_sum;
+                this.cur_sum = cur_sum;
+                this.checked = checked;
+        }
         public Long getId() {
                 return id;
         }
 
+        public int getChecked() {
+                return checked;
+        }
+
+        public void setChecked(int checked) {
+                this.checked = checked;
+        }
+
+        public String getCard() {
+                return card;
+        }
+
+        public void setCard(String card) {
+                this.card = card;
+        }
         public void setId(Long id) {
                 this.id = id;
         }
@@ -37,6 +69,14 @@ public class Project {
 
         public void setName(String name) {
                 this.name = name;
+        }
+
+        public String getMail() {
+                return mail;
+        }
+
+        public void setMail(String mail) {
+                this.mail = mail;
         }
 
         public int getNeed_sum() {

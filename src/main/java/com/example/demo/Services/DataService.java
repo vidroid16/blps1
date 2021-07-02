@@ -10,4 +10,6 @@ public interface DataService {
     void addUser(User user);
     void addProject(Project project);
     ArrayList<User> listUsers();
+    void moderate(Long project);
+    void changeProjectCard(Long projectId, String nCardNum);
 }

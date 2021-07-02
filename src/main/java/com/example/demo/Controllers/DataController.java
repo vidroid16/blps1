@@ -7,10 +7,13 @@ import com.example.demo.DataBase.UsersDB.UsersRepository;
 import com.example.demo.Services.Implementations.DataServiceImpl;
 import com.example.demo.Services.DataService;
 import com.example.demo.Services.UserService;
+import com.example.demo.socket.SocketMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +24,10 @@ import java.util.ArrayList;
 public class DataController {
     private final DataServiceImpl dataService;
     private final UsersRepository userRepository;
+    @Value("is_listen")
+    private String isListenStr;
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
 
     @Autowired
     public DataController(DataServiceImpl dataService, UsersRepository userRepository) {
@@ -44,12 +51,37 @@ public class DataController {
     @Operation(summary = "Create project")
     @PostMapping ("/add_project")
     public ResponseEntity addProject(@RequestBody Project project) {
-        try {
-            dataService.addProject(project);
-            return ResponseEntity.ok().build();
-        }catch (Exception e){
-            return null;
+        boolean isListen = Boolean.parseBoolean(isListenStr);
+        if(!isListen) {
+            try {
+                dataService.addProject(project);
+                SocketMessage message = new SocketMessage();
+                message.setContent(String.valueOf(project.getId()));
+                simpMessagingTemplate.convertAndSend("/queue/messages", message);
+                return ResponseEntity.ok().build();
+            } catch (Exception e) {
+                return null;
+            }
         }
+        return null;
+    }
+
+    @Operation(summary = "Change project card")
+    @PostMapping ("/change_project_card")
+    public ResponseEntity changeProjectCard(@RequestParam("project_id") Long projectId, @RequestParam("ncard") String nCardNumber) {
+        boolean isListen = Boolean.parseBoolean(isListenStr);
+        if(!isListen) {
+            try {
+                dataService.changeProjectCard(projectId, nCardNumber);
+                SocketMessage message = new SocketMessage();
+                message.setContent(String.valueOf(projectId));
+                simpMessagingTemplate.convertAndSend("/queue/messages", message);
+                return ResponseEntity.ok().build();
+            } catch (Exception e) {
+                return null;
+            }
+        }
+        return null;
     }
 
     @Operation(summary = "List users")
