@@ -10,8 +10,8 @@ import javax.mail.internet.MimeMessage;
 public class MailSender {
 
     private MailService service = MailService.GMAIL;
-    private String login = "shalyap3211@gmail.com";
-    private String password = "Qwerty228";
+    private String login = "***********";
+    private String password = "*******";
 
 
     public void send(String theme, String message, String toEmail) {
