@@ -28,7 +28,7 @@ public class LocalDB{
         bitronixTransactionManager.setTransactionTimeout(10000);
         CustomJtaPlatform.setUserTransaction(bitronixTransactionManager);
         CustomJtaPlatform.setTransactionManager(bitronixTransactionManager);
-        System.out.println("refactor");
+        //refact
         return bitronixTransactionManager;
     }
     @Bean(name = "transactionManager")
