@@ -6,15 +6,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
+
 @Slf4j
-public class MyJob implements Job {
+@EnableScheduling
+public class MyJob{
     @Autowired
     private TestServiceImpl memberService;
-    @Override
-    public void execute(JobExecutionContext context) {
-        log.info("Job ** {} ** starting @ {}", context.getJobDetail().getKey().getName(), context.getFireTime());
+    @Scheduled(fixedRate = 3000000)
+    public void execute() {
         System.out.println(memberService.say());
         memberService.mail();
-        log.info("Job ** {} ** completed.  Next job scheduled @ {}", context.getJobDetail().getKey().getName(), context.getNextFireTime());
     }
 }
