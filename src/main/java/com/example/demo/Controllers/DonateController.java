@@ -1,6 +1,6 @@
 package com.example.demo.Controllers;
 
-import com.example.demo.Services.Implementations.DonationServiceImpl;
+import com.example.demo.Services.Implementations.MoneyOperationsServiceImpl;
 import com.example.demo.socket.SocketMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -43,10 +43,10 @@ import java.util.concurrent.TimeoutException;
 
 @RestController
 public class DonateController {
-    private final DonationServiceImpl donationService;
+    private final MoneyOperationsServiceImpl donationService;
 
     @Autowired
-    public DonateController(DonationServiceImpl donationService) {
+    public DonateController(MoneyOperationsServiceImpl donationService) {
         this.donationService = donationService;
     }
 
@@ -71,11 +71,4 @@ public class DonateController {
         if(donated == 400) return "Не достаточно средств или некорректно введены данные карты";
         return "Что-то пошло не так";
     }
-
-    @PostMapping(path ="/Tr")
-    public int testTr(){
-        donationService.testTr();
-        return 12;
-    }
-
 }
