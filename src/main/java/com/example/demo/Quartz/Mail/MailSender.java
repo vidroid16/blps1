@@ -13,9 +13,7 @@ public class MailSender {
     private String login = "shalyap3211@gmail.com";
     private String password = "Qwerty228";
 
-
-    public void send(String theme, String message, String toEmail) {
-        System.out.println("Sending email!");
+    public Session getGmailSession(){
         java.util.Properties props = new java.util.Properties();
         props.put("mail.smtp.host", service.getHost());
         props.put("mail.smtp.port", service.getPort());
@@ -32,8 +30,9 @@ public class MailSender {
                 return new PasswordAuthentication(login, password);
             }
         });
-
-// Construct the message
+        return session;
+    }
+    public void send(Session session, String theme, String message, String toEmail){
         String to = toEmail;
         String from = login;
         String subject = theme;
@@ -43,8 +42,6 @@ public class MailSender {
             msg.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
             msg.setSubject(subject);
             msg.setText(message);
-
-// Send the message.
             Transport.send(msg);
             System.out.println("Отправлено!");
         } catch (AuthenticationFailedException e) {
