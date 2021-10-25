@@ -85,29 +85,4 @@ public class DonationServiceImpl implements DonationService {
         transactionManager.commit(status);
         return 200;
     }
-
-    @Override
-    public ArrayList<Donation> getUserDonationsByToken(String token) {
-        return null;
-    }
-
-    @Override
-    public void testTr(){
-        String ss = new String("ffff");
-        DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-        def.setName("Donation Transaction"); // Transaction name
-        def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-        TransactionStatus status = transactionManager.getTransaction(def);
-        try {
-            User user = new User();
-            user.setLogin("lol227");
-            user.setPassword("lol227");
-            usersRepository.save(user);
-            System.out.println(22);
-        }catch (NullPointerException e){
-            transactionManager.rollback(status);
-            throw e;
-        }
-        transactionManager.commit(status);
-    }
 }
