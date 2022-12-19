@@ -28,7 +28,7 @@ public class TestServiceImpl implements TestService {
     MailSender mailSender;
     @Override
     public String say() {
-        return "I am test service. Everything is OK. Slava Putinu!";
+        return "I am test service. Everything is OK";
     }
     @Override
     public void use() {
